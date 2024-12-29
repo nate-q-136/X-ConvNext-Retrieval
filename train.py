@@ -76,7 +76,7 @@ def main():
         checkpoint = torch.load(args.resume, map_location=device)
         model.load_state_dict(checkpoint)
     else:
-        if os.path.exists("convnext_large.pth"):
+        if not os.path.exists("convnext_large.pth"):
             print("Downloading pre-trained ConvNeXt model")
             download_model()
             print("Model downloaded")
