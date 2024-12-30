@@ -205,7 +205,7 @@ def main():
             )
             best_accuracy = test_accuracy
             torch.save(
-                model.state_dict(), f"{args.save_dir}/best_model_epoch_{epoch}.pth"
+                model.state_dict(), f"{args.save_dir}/best_model_epoch_{epoch+1}.pth"
             )
 
     print("Training complete.")
