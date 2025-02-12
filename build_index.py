@@ -78,7 +78,7 @@ def main():
             features = gmp(features)
             image_embeddings.append(features.cpu().numpy())
             image_name = test_dataset.image_names[idx]
-            image_ids_names[idx] = image_name
+            image_ids_names[idx] = image_name.split('/')[-1]
             image_ids_labels[idx] = label.item()
 
     image_embeddings = np.vstack(image_embeddings)
