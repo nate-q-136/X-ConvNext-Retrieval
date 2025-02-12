@@ -69,6 +69,7 @@ def main():
     print(f"Building index for {args.dataset} dataset")
     image_embeddings = []
     image_ids_labels = {}
+    image_ids_names = {}
     with torch.no_grad():
         for idx, (image, label) in enumerate(tqdm(test_dataset)):
             image = image.to(device)
@@ -76,6 +77,8 @@ def main():
             features = model.forward_features(image)
             features = gmp(features)
             image_embeddings.append(features.cpu().numpy())
+            image_name = test_dataset.image_names[idx]
+            image_ids_names[idx] = image_name
             image_ids_labels[idx] = label.item()
 
     image_embeddings = np.vstack(image_embeddings)
@@ -85,8 +88,8 @@ def main():
     image_embeddings_pca = pca.fit_transform(image_embeddings)
 
     dimension = image_embeddings_pca.shape[1]
-    index = faiss.IndexFlatIP(dimension) # Similarity is calculated using inner product
-    index.train(image_embeddings_pca.astype(np.float32))
+    index = faiss.IndexFlatL2(dimension) # Similarity is calculated using inner product
+    # index.train(image_embeddings_pca.astype(np.float32))
     index.add(image_embeddings_pca.astype(np.float32))
     print("Index built")
     print("Saving index")
@@ -96,6 +99,9 @@ def main():
     with open(f'{args.save_index_dir}/image_ids_labels.json', 'w') as f:
         json.dump(image_ids_labels, f)
     
+    with open(f'{args.save_index_dir}/image_ids_names.json', 'w') as f:
+        json.dump(image_ids_names, f)
+        
     with open(f'{args.save_index_dir}/test_dataset.pkl', 'wb') as f:
         pickle.dump(test_dataset, f)
 

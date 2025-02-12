@@ -1,2 +1,6 @@
 __pycache__/
 .ruff_cache/
+ISIC-2017_Test_v2_Data/
+checkpoints/
+ISIC-2017_Test_v2_Part3_GroundTruth_balanced.csv
+check.ipynb
